@@ -1,0 +1,8 @@
+// Lists
+export const GET_LISTS_FROM_DB = "GET_LISTS_FROM_DB";
+export const CHANGE_ACTIVE_LIST = "CHANGE_ACTIVE_LIST";
+// Tasks
+export const UPDATE_TASK_LIST = "UPDATE_TASK_LIST";
+export const CHANGE_ACTIVE_TASK = "CHANGE_ACTIVE_TASK";
+// Application
+export const CHANGE_VIEW_TASK_LIST = "CHANGE_VIEW_TASK_LIST";
