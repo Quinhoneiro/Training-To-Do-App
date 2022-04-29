@@ -3,24 +3,16 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Container, UserInfo } from "./styles";
 import api from "../../service/api";
-import { getListsFromDB, changeActiveList } from "../../store/actions/lists";
 import GroupItem from "../../components/GroupItem/GroupItem";
 import avatarImg from "../../assets/perfil.jpg";
-import { updateTaskList } from "../../store/actions/tasks";
+import {
+  updateActiveListActionCreator,
+  updateListsActionCreator,
+} from "../../store/actions/lists";
+import { createListOnDB, getListsFromDB } from "../../service/apiFunctions";
 
 const NavBar = (props) => {
-  const {
-    lists,
-    activeList,
-    getLists,
-    changeActiveList,
-    createActionUpdateTaskList,
-    createNewList,
-  } = props;
-
-  const start = useEffect(() => {
-    getLists();
-  }, []);
+  const { listsData, activeListData, updateActiveList, updateLists } = props;
 
   const handleShowInput = useCallback(() => {
     const addListEl = [...document.getElementsByClassName("addList")][0];
@@ -29,14 +21,16 @@ const NavBar = (props) => {
     addListEl.classList.toggle("inactive");
   }, []);
 
-  const handleSubmit = useCallback(async (newListName) => {
-    await createNewList(newListName);
-    await getLists();
+  const [newListName, setNewListName] = useState("");
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    await createListOnDB(newListName);
+    const lists = await getListsFromDB();
+    updateLists(lists.data.data);
     handleShowInput();
     setNewListName("");
-  }, []);
-
-  const [newListName, setNewListName] = useState("Teste");
+  }
 
   return (
     <Container>
@@ -46,8 +40,7 @@ const NavBar = (props) => {
       <div className="listNameInput">
         <form
           onSubmit={(e) => {
-            e.preventDefault(0);
-            handleSubmit(newListName);
+            handleSubmit(e);
           }}
         >
           <label htmlFor="inputListName">
@@ -70,47 +63,46 @@ const NavBar = (props) => {
           <span>🔎</span>
         </div>
       </UserInfo>
-      {lists.map((list) => {
-        if (list.type === "fixed") {
-          return (
-            <Link
-              key={list.id}
-              data_key={list.id}
-              to={"/"}
-              onClick={(e) => {
-                e.preventDefault();
-                changeActiveList(list);
-                createActionUpdateTaskList(list);
-              }}
-            >
-              <GroupItem
-                active={activeList.name === list.name}
-                icon={list.icon}
-                name={list.name}
-                qnt={list.tasks.length}
-              />
-            </Link>
-          );
-        }
-      })}
+      <div className="wrapper">
+        {listsData.map((list) => {
+          if (list.type === "fixed") {
+            return (
+              <Link
+                key={list.id}
+                data_key={list.id}
+                to={"/"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  updateActiveList(list, listsData);
+                }}
+              >
+                <GroupItem
+                  active={activeListData?.name === list.name}
+                  icon={list.icon}
+                  name={list.name}
+                  qnt={list.tasks.length}
+                />
+              </Link>
+            );
+          }
+        })}
+      </div>
       <div className="BottomBar">
         <div className="Bar"></div>
       </div>
-      {lists.map((list) => {
+      {listsData.map((list) => {
         if (list.type === "list") {
           return (
             <Link
               key={list.id}
               data_key={list.id}
               to={"/"}
-              onClick={(e) => {
-                e.preventDefault();
-                changeActiveList(list);
-                createActionUpdateTaskList(list);
+              onClick={() => {
+                updateActiveList(list, listsData);
               }}
             >
               <GroupItem
-                active={activeList.name === list.name}
+                active={activeListData?.name === list.name}
                 icon={list.icon}
                 name={list.name}
                 qnt={list.tasks.length}
@@ -125,33 +117,18 @@ const NavBar = (props) => {
 
 function mapStateToProps(state) {
   return {
-    lists: state.lists.lists,
-    activeList: state.lists.activeList,
+    listsData: state.listsReducer.lists,
+    activeListData: state.listsReducer.activeList,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    async getLists() {
-      const response = await api.get("lists");
-      const action = getListsFromDB(response.data.data);
-      dispatch(action);
+    updateActiveList(activeList, lists) {
+      dispatch(updateActiveListActionCreator(activeList, lists));
     },
-    changeActiveList(activeList) {
-      const action = changeActiveList(activeList);
-      dispatch(action);
-    },
-    createActionUpdateTaskList(activeList) {
-      const taskList = activeList.tasks;
-      const action = updateTaskList(taskList);
-      dispatch(action);
-    },
-    async createNewList(listName) {
-      const list = await api.post("lists", {
-        name: listName,
-        type: "list",
-        icon: "✅",
-      });
+    updateLists(lists) {
+      dispatch(updateListsActionCreator(lists));
     },
   };
 }

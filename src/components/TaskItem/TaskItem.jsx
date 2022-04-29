@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { Container } from "./styles";
 import Checkbox from "@mui/material/Checkbox";
 import { format } from "date-fns";
-import { changeActiveTask } from "../../store/actions/tasks";
+import { updateActiveTaskActionCreator } from "../../store/actions/tasks";
 
 const TaskItem = (props) => {
-  const { tasksView, activeTask, createActionChangeActiveTask } = props;
+  const { tasksViewData, updateActiveTask } = props;
+
   const [checked, setChecked] = React.useState(props.checked);
   const formatedDate = props.date && format(new Date(props.date), "dd/MM/yyyy");
 
@@ -14,23 +15,23 @@ const TaskItem = (props) => {
     setChecked(event.target.checked);
   };
 
-  const handleTaskClick = (active) => {
-    active
-      ? createActionChangeActiveTask({})
-      : createActionChangeActiveTask({ id: props.data_key });
-  };
+  function handleTaskClick(active) {
+    active ? updateActiveTask({}) : updateActiveTask(props.data_key);
+  }
 
   return (
     <Container
-      view={tasksView}
+      onClick={() => handleTaskClick(props.active)}
+      view={tasksViewData}
       active={props.active}
-      onClick={(e) => handleTaskClick(props.active)}
     >
       <Checkbox
+        className="ckb"
         size="large"
         checked={checked}
         onChange={handleChange}
         inputProps={{ "aria-label": "controlled" }}
+        onClick={() => console.log("Blatz")}
       />
       <h3>{props.name}</h3>
       <p>{formatedDate}</p>
@@ -40,16 +41,14 @@ const TaskItem = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    activeTask: state.tasks.activeTask,
-    tasksView: state.application.tasksView,
+    tasksViewData: state.applicationReducer.tasksView,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createActionChangeActiveTask(activeTask) {
-      const action = changeActiveTask(activeTask);
-      dispatch(action);
+    updateActiveTask(activeTask) {
+      dispatch(updateActiveTaskActionCreator(activeTask));
     },
   };
 };

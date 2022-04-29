@@ -1,15 +1,15 @@
-import { GET_LISTS_FROM_DB, CHANGE_ACTIVE_LIST } from "./actionTypes";
+import { UPDATE_LISTS, UPDATE_ACTIVE_LIST } from "./actionTypes";
 
-export const getListsFromDB = (lists) => {
+export const updateListsActionCreator = (lists) => {
   return {
-    type: GET_LISTS_FROM_DB,
+    type: UPDATE_LISTS,
     payload: lists,
   };
 };
 
-export const changeActiveList = (activeLists) => {
+export const updateActiveListActionCreator = (activeList, lists) => {
   return {
-    type: CHANGE_ACTIVE_LIST,
-    payload: activeLists,
+    type: UPDATE_ACTIVE_LIST,
+    payload: { activeList, lists },
   };
 };

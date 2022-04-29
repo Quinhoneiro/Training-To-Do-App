@@ -6,6 +6,10 @@ export const Container = styled.div`
   transition: all 0.3s;
   cursor: pointer;
 
+  & .ckb {
+    z-index: 1000;
+  }
+
   &:hover {
     background-color: ${shade(0.1, "#ddd")};
   }

@@ -2,11 +2,13 @@ import { createStore, combineReducers } from "redux";
 import listReducers from "./reducers/lists";
 import taskReducers from "./reducers/task";
 import applicationReducers from "./reducers/application";
+import taskFormReducers from "./reducers/taskForm";
 
 const reducers = combineReducers({
-  lists: listReducers,
-  tasks: taskReducers,
-  application: applicationReducers,
+  listsReducer: listReducers,
+  tasksReducer: taskReducers,
+  applicationReducer: applicationReducers,
+  taskFormReducer: taskFormReducers,
 });
 
 function storeConfig() {

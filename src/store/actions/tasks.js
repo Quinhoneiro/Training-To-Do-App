@@ -1,15 +1,34 @@
-import { UPDATE_TASK_LIST, CHANGE_ACTIVE_TASK } from "./actionTypes";
+import {
+  UPDATE_ACTIVE_TASK,
+  UPDATE_TASK_DATA,
+  CREATE_NEW_TASK,
+  DELETE_TASK,
+} from "../actions/actionTypes";
 
-export const updateTaskList = (taskList) => {
+export const updateActiveTaskActionCreator = (activeTask) => {
   return {
-    type: UPDATE_TASK_LIST,
-    payload: taskList,
+    type: UPDATE_ACTIVE_TASK,
+    payload: activeTask,
   };
 };
 
-export const changeActiveTask = (activeTask) => {
+export const updateTaskDataActionCreator = (data) => {
   return {
-    type: CHANGE_ACTIVE_TASK,
-    payload: activeTask,
+    type: UPDATE_TASK_DATA,
+    payload: data,
+  };
+};
+
+export const createNewTaskActionCreator = (data) => {
+  return {
+    type: CREATE_NEW_TASK,
+    payload: data,
+  };
+};
+
+export const deleteTaskActionCreator = (data) => {
+  return {
+    type: DELETE_TASK,
+    payload: data,
   };
 };

@@ -1,14 +1,22 @@
-import React, { useState } from "react";
-import DatePickerComponent from "react-datepicker";
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const DatePicker = () => {
-  const [startDate, setStartDate] = useState(new Date());
+export default function BasicDatePicker() {
+  const [value, setValue] = React.useState(null);
+
   return (
-    <DatePickerComponent
-      selected={startDate}
-      onChange={(date) => setStartDate(date)}
-    />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DatePicker
+        label="Basic example"
+        value={value}
+        onChange={(newValue) => {
+          setValue(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </LocalizationProvider>
   );
-};
-
-export default DatePicker;
+}

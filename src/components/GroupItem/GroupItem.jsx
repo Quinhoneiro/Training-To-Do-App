@@ -1,7 +1,7 @@
-import React from 'react';
-import { Container } from './styles';
+import React from "react";
+import { Container } from "./styles";
 
-const GroupItem = props => {
+const GroupItem = (props) => {
   return (
     <Container active={props.active}>
       <span className="Icon">{props.icon}</span>
