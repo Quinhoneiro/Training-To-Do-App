@@ -32,6 +32,10 @@ const NavBar = (props) => {
     setNewListName("");
   }
 
+  function calcPendingTasks(tasks) {
+    return tasks.filter((task) => task.status == false);
+  }
+
   return (
     <Container>
       <div className="addList" onClick={() => handleShowInput()}>
@@ -80,7 +84,7 @@ const NavBar = (props) => {
                   active={activeListData?.name === list.name}
                   icon={list.icon}
                   name={list.name}
-                  qnt={list.tasks.length}
+                  qnt={calcPendingTasks(list.tasks).length}
                 />
               </Link>
             );
@@ -105,7 +109,7 @@ const NavBar = (props) => {
                 active={activeListData?.name === list.name}
                 icon={list.icon}
                 name={list.name}
-                qnt={list.tasks.length}
+                qnt={calcPendingTasks(list.tasks).length}
               />
             </Link>
           );

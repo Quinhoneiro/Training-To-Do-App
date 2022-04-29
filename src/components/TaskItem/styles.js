@@ -51,10 +51,19 @@ export const Container = styled.div`
       max-height: 100%;
 
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
 
       margin-top: 0px;
+
+      & h3 {
+        font-weight: normal;
+        font-size: 1.8rem;
+        margin-left: 0;
+        margin-bottom: 5px;
+        text-align: center;
+      }
     `}
 
 
